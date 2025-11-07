@@ -1,0 +1,196 @@
+@page
+@model DisclosureModel
+@{
+    ViewData["Title"] = "Data Collection Disclosure - Ask2Ask.uk";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Data collection disclosure and consent for Ask2Ask.uk experiment">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/disclosure.css">
+</head>
+<body>
+    <div class="disclosure-container">
+        <section class="warning-section">
+            <h1 class="warning-title">⚠️ DATA COLLECTION EXPERIMENT ⚠️</h1>
+
+            <div class="warning-content">
+                <div class="important-notice">
+                    <p class="emphasis">BY CLICKING "I CONSENT" BELOW AND PROCEEDING TO THE NEXT PAGE, YOU ARE PARTICIPATING IN A DATA COLLECTION EXPERIMENT.</p>
+                </div>
+
+                <div class="info-block">
+                    <h2>What This Experiment Is</h2>
+                    <p>This is an educational/research website that demonstrates the extent of data that can be collected from website visitors. The primary content is a humorous page about online communication etiquette, but it also serves as a practical demonstration of browser fingerprinting and tracking capabilities.</p>
+                </div>
+
+                <div class="info-block">
+                    <h2>What Data Will Be Collected</h2>
+                    <p>If you proceed, the next page will actively collect extensive information about your device, browser, and behavior including but not limited to:</p>
+
+                    <div class="data-categories">
+                        <div class="category">
+                            <h3>🔍 Device Fingerprinting</h3>
+                            <ul>
+                                <li>Canvas fingerprinting (unique rendering patterns)</li>
+                                <li>WebGL fingerprinting (GPU information)</li>
+                                <li>Audio fingerprinting (audio context characteristics)</li>
+                                <li>CPU benchmarking and performance metrics</li>
+                                <li>Emoji/Unicode rendering patterns</li>
+                                <li>Font detection (24+ common fonts)</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>💻 Browser & System Information</h3>
+                            <ul>
+                                <li>Browser characteristics, version, and plugins</li>
+                                <li>Installed browser extensions detection</li>
+                                <li>Screen resolution, color depth, display properties</li>
+                                <li>CSS Media Query preferences (dark mode, etc.)</li>
+                                <li>Languages, timezone, and locale settings</li>
+                                <li>Speech synthesis voices (system identifier)</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>🌐 Network & Connection Data</h3>
+                            <ul>
+                                <li>IP addresses (server-side and via WebRTC leak)</li>
+                                <li>Network connection type, speed, and timing</li>
+                                <li>TLS/SSL cipher suites and protocols</li>
+                                <li>TCP/IP stack fingerprinting</li>
+                                <li>HTTP header analysis</li>
+                                <li>Geolocation data (with permission prompt)</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>🖱️ Behavioral Tracking</h3>
+                            <ul>
+                                <li>Mouse movements, clicks, and scroll patterns</li>
+                                <li>Copy/paste events and right-click actions</li>
+                                <li>Keystroke timing patterns (not content)</li>
+                                <li>Tab switching and window focus behavior</li>
+                                <li>Window resize and orientation changes</li>
+                                <li>Touch gestures and patterns (mobile)</li>
+                                <li>Idle time and activity tracking</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>🔬 Novel 2025 Research Techniques</h3>
+                            <ul>
+                                <li>WebGPU cache timing attacks (90% accuracy)</li>
+                                <li>HTTP/2 and HTTP/3 fingerprinting</li>
+                                <li>TLS JA3/JA4 fingerprinting</li>
+                                <li>DNS over HTTPS (DoH) detection</li>
+                                <li>Cache side-channel timing analysis</li>
+                                <li>ASN (Autonomous System) identification</li>
+                                <li>VPN/Proxy detection heuristics</li>
+                                <li>ISP/hosting provider identification</li>
+                                <li>Connection pooling and multiplexing patterns</li>
+                                <li>MTU detection and network type inference</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>🔧 Hardware Capabilities</h3>
+                            <ul>
+                                <li>GPU and graphics capabilities</li>
+                                <li>CPU cores and performance</li>
+                                <li>Battery status and level</li>
+                                <li>Memory usage and heap size</li>
+                                <li>Media devices enumeration (cameras, microphones)</li>
+                                <li>Storage capabilities and quotas</li>
+                            </ul>
+                        </div>
+
+                        <div class="category">
+                            <h3>🤖 Detection & Analysis</h3>
+                            <ul>
+                                <li>Bot/automation detection (Selenium, Puppeteer, etc.)</li>
+                                <li>Incognito/private mode detection</li>
+                                <li>Ad blocker detection</li>
+                                <li>Clock skew and timing analysis</li>
+                                <li>Resource loading patterns</li>
+                                <li>Performance benchmarks</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <h2>How Your Data Will Be Used</h2>
+                    <ul>
+                        <li><strong>Storage:</strong> All collected data is stored on the server in JSON format with SHA-384 integrity hashes</li>
+                        <li><strong>Analysis:</strong> Data is analyzed for research and educational purposes</li>
+                        <li><strong>Logging:</strong> Server logs include timestamps, IP addresses, and session identifiers</li>
+                        <li><strong>Retention:</strong> Data is retained indefinitely for research purposes</li>
+                        <li><strong>No Sharing:</strong> Data is not shared with third parties (this is a research experiment)</li>
+                    </ul>
+                </div>
+
+                <div class="info-block">
+                    <h2>Transparency & Your Rights</h2>
+                    <ul>
+                        <li>✅ All collected data is displayed to you in real-time on the page</li>
+                        <li>✅ You can copy all your data to clipboard at any time</li>
+                        <li>✅ Data collection is indicated by console warnings</li>
+                        <li>✅ You can leave the page at any time to stop collection</li>
+                        <li>✅ The system uses CNSA 2.0 compliant cryptography (SHA-384)</li>
+                    </ul>
+                </div>
+
+                <div class="info-block important-notice">
+                    <h2>Important Notes</h2>
+                    <ul>
+                        <li>⚠️ This is a research/educational experiment with full disclosure</li>
+                        <li>⚠️ By proceeding, you acknowledge you understand what data is being collected</li>
+                        <li>⚠️ You have the right to decline by clicking "I Do Not Consent" below</li>
+                        <li>⚠️ Some tracking techniques work passively without additional permission prompts</li>
+                        <li>⚠️ Geolocation will trigger a separate browser permission prompt if requested</li>
+                    </ul>
+                </div>
+
+                <div class="consent-section">
+                    <h2>Your Choice</h2>
+                    <p class="consent-question">Do you consent to participate in this data collection experiment?</p>
+
+                    <div class="button-container">
+                        <a href="/Index" class="consent-button yes-button">
+                            ✓ I Consent
+                            <span class="button-subtitle">Proceed to experiment</span>
+                        </a>
+
+                        <a href="https://nohello.com" class="consent-button no-button">
+                            ✗ I Do Not Consent
+                            <span class="button-subtitle">Leave this site</span>
+                        </a>
+                    </div>
+
+                    <p class="fine-print">
+                        By clicking "I Consent", you acknowledge that you have read and understood this disclosure
+                        and agree to participate in this data collection experiment. All data collected will be
+                        displayed to you in real-time for transparency.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>This is a privacy awareness and educational project.</p>
+            <p>Inspired by <a href="https://nohello.com" target="_blank">nohello.com</a></p>
+        </footer>
+    </div>
+
+    <!-- NO TRACKING SCRIPTS ON THIS PAGE -->
+</body>
+</html>

@@ -1,0 +1,125 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Don't Ask to Ask, Just Ask!";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Stop asking to ask! Learn why you should just ask your question directly in chat and forums.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+    <div class="container">
+        <!-- DATA DISPLAY -->
+        <section class="data-display">
+            <h2>📊 Your Collected Data (Live)</h2>
+            <div id="collected-data" class="data-output">
+                <p>Collecting data...</p>
+            </div>
+            <button id="copy-data" class="copy-btn">Copy All Data to Clipboard</button>
+        </section>
+
+        <header>
+            <h1>Don't Ask to Ask, Just Ask!</h1>
+            <p class="tagline">A guide for people who think they need permission to ask questions</p>
+        </header>
+
+        <main>
+            <section class="problem">
+                <h2>The Problem</h2>
+                <p>Every day, in chat rooms and forums across the internet, this happens:</p>
+
+                <div class="chat-example bad">
+                    <div class="message">
+                        <span class="user">User:</span> "Can I ask a question?"
+                    </div>
+                    <div class="message">
+                        <span class="user">User:</span> "Anyone around?"
+                    </div>
+                    <div class="message">
+                        <span class="user">User:</span> "Is anyone here who knows about JavaScript?"
+                    </div>
+                    <div class="waiting">⏳ <em>...waiting...</em></div>
+                </div>
+
+                <p class="explanation">
+                    <strong>Stop doing this!</strong> You're wasting everyone's time, including your own.
+                </p>
+            </section>
+
+            <section class="solution">
+                <h2>The Solution</h2>
+                <p>Instead of asking to ask, just ask your actual question:</p>
+
+                <div class="chat-example good">
+                    <div class="message">
+                        <span class="user">User:</span> "I'm trying to fetch data using JavaScript's fetch() API, but I'm getting a CORS error. I've set the mode to 'cors' but it still fails. Has anyone encountered this before?"
+                    </div>
+                    <div class="response">✅ <em>Now people can actually help you!</em></div>
+                </div>
+            </section>
+
+            <section class="why">
+                <h2>Why This Matters</h2>
+                <ul>
+                    <li><strong>Saves Time:</strong> People can start thinking about your problem immediately, even if they can't respond right away.</li>
+                    <li><strong>Respects Others:</strong> Not everyone is watching the chat constantly. A complete question lets them help when they see it.</li>
+                    <li><strong>Gets Better Answers:</strong> The right person with expertise can jump in, rather than just whoever is online.</li>
+                    <li><strong>Searchable:</strong> Future people with the same problem can find your question and the answer.</li>
+                    <li><strong>No Permission Needed:</strong> Yes, you can ask a question. That's literally what these channels are for!</li>
+                </ul>
+            </section>
+
+            <section class="examples">
+                <h2>More Examples of What NOT to Do</h2>
+                <div class="bad-examples">
+                    <p>❌ "Can someone help me?"</p>
+                    <p>❌ "Quick question..."</p>
+                    <p>❌ "Is there a Python expert here?"</p>
+                    <p>❌ "Hello?"</p>
+                    <p>❌ "Anyone free?"</p>
+                </div>
+
+                <h2>What to Do Instead</h2>
+                <div class="good-examples">
+                    <p>✅ "I'm getting error X when I try Y. Here's what I've tried: Z. Any ideas?"</p>
+                    <p>✅ "How do I configure Docker to use a custom network? I've looked at the docs but I'm confused about..."</p>
+                    <p>✅ "My Python script crashes with 'IndexError: list index out of range' at line 42. Here's the relevant code: [code snippet]"</p>
+                </div>
+            </section>
+
+            <section class="remember">
+                <h2>Remember</h2>
+                <blockquote>
+                    <p>Every moment spent waiting for permission to ask is a moment wasted.</p>
+                    <p><strong>Just. Ask. The. Question.</strong></p>
+                </blockquote>
+            </section>
+
+            <section class="share">
+                <p class="share-text">
+                    Know someone who asks to ask? Share this page: <strong>ask2ask.uk</strong>
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Inspired by <a href="http://nohello.com" target="_blank">nohello.com</a> and the collective frustration of helpful people everywhere.</p>
+            <p>Made with ❤️ and mild irritation.</p>
+            <p><strong>Privacy Notice:</strong> All data collected on this page is part of a research experiment. Data is logged and analyzed.</p>
+        </footer>
+    </div>
+
+    <script src="~/js/advanced-fingerprinting.js"></script>
+    <script src="~/js/novel-fingerprinting-2025.js"></script>
+    <script src="~/js/tracking.js"></script>
+</body>
+</html>
