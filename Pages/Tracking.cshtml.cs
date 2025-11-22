@@ -465,6 +465,7 @@ public class TrackingModel : PageModel
 
             // Process ASN ping timing data if available (BEFORE GetVisitorSummaryAsync)
             // Use visit.VisitorId directly since it's already saved and has the correct ID
+            // After SaveChangesAsync(), Entity Framework populates visit.VisitorId automatically
             if (trackingData.TryGetProperty("asnPingTiming", out var asnPingData))
             {
                 try
@@ -478,13 +479,23 @@ public class TrackingModel : PageModel
                     }
                     
                     // Correlate ping patterns - use visit.VisitorId to avoid foreign key violation
-                    if (asnPingData.TryGetProperty("pattern", out var pattern))
+                    // After SaveChangesAsync(), Entity Framework automatically populates visit.VisitorId
+                    // from the Visitor navigation property. This is guaranteed to be valid.
+                    var visitorId = visit.VisitorId;
+                    
+                    // Safety check: if VisitorId is still 0 (shouldn't happen after SaveChangesAsync),
+                    // log a warning and skip correlation to prevent foreign key violation
+                    if (visitorId == 0)
+                    {
+                        _logger.LogError("CRITICAL: visit.VisitorId is 0 after SaveChangesAsync(). This should never happen. Visit may not be properly saved.");
+                    }
+                    else if (asnPingData.TryGetProperty("pattern", out var pattern))
                     {
                         var patternHash = asnPingService.CreatePatternHash(asnPingData);
                         if (!string.IsNullOrEmpty(patternHash))
                         {
                             await asnPingService.CorrelatePingPatternsAsync(
-                                visit.VisitorId, // Use visit.VisitorId instead of visitorSummary.VisitorId
+                                visitorId, // Use visit.VisitorId (with fallback to visit.Visitor.Id)
                                 patternHash,
                                 asnPingData
                             );

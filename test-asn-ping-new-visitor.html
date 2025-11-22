@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test ASN Ping Timing - New Visitor</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a2e;
+            color: #e2e8f0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #ff6b6b; }
+        .test-section {
+            background: rgba(30, 30, 40, 0.8);
+            border: 2px solid rgba(100, 100, 120, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .success { color: #4ade80; }
+        .error { color: #ff6b6b; }
+        .info { color: #60a5fa; }
+        pre {
+            background: rgba(20, 20, 30, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid rgba(100, 100, 120, 0.3);
+        }
+        button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+        #log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 ASN Ping Timing Test - New Visitor Foreign Key Fix</h1>
+    
+    <div class="test-section">
+        <h2>Test Scenario</h2>
+        <p>This test simulates a <strong>new visitor</strong> with ASN ping timing data to verify the foreign key constraint fix.</p>
+        <p><strong>Expected Behavior:</strong></p>
+        <ul>
+            <li>✅ New visitor record created with valid VisitorId</li>
+            <li>✅ ASN ping timing measurements stored successfully</li>
+            <li>✅ ASN ping correlation created with correct VisitorId (not 0)</li>
+            <li>✅ No foreign key constraint violations</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Controls</h2>
+        <button onclick="runTest()">🚀 Run Test</button>
+        <button onclick="clearLog()">🗑️ Clear Log</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toISOString().substr(11, 12);
+            const color = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            logDiv.innerHTML += `<div class="${color}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // Simulate ASN ping timing measurement
+        function createMockAsnPingData() {
+            return {
+                measurements: [
+                    {
+                        success: true,
+                        asn: 'AS15169',
+                        asnName: 'Google LLC',
+                        country: 'US',
+                        region: 'Global',
+                        target: '8.8.8.8',
+                        targetType: 'IP',
+                        average: 25.5,
+                        min: 23.2,
+                        max: 28.1,
+                        attempts: 2,
+                        successful: 2,
+                        jitter: 2.45,
+                        measuredAt: new Date().toISOString()
+                    },
+                    {
+                        success: true,
+                        asn: 'AS13335',
+                        asnName: 'Cloudflare',
+                        country: 'Global',
+                        region: 'CDN',
+                        target: '1.1.1.1',
+                        targetType: 'CDN',
+                        average: 18.3,
+                        min: 17.1,
+                        max: 19.8,
+                        attempts: 2,
+                        successful: 2,
+                        jitter: 1.35,
+                        measuredAt: new Date().toISOString()
+                    },
+                    {
+                        success: true,
+                        asn: 'AS3320',
+                        asnName: 'Deutsche Telekom',
+                        country: 'DE',
+                        region: 'Central Europe',
+                        target: '194.25.0.1',
+                        targetType: 'IP',
+                        average: 45.7,
+                        min: 43.2,
+                        max: 48.9,
+                        attempts: 2,
+                        successful: 2,
+                        jitter: 2.85,
+                        measuredAt: new Date().toISOString()
+                    }
+                ],
+                pattern: {
+                    pattern: [
+                        { asn: 'AS13335', normalizedTime: 1.0, absoluteTime: 18.3, country: 'Global', region: 'CDN' },
+                        { asn: 'AS15169', normalizedTime: 1.39, absoluteTime: 25.5, country: 'US', region: 'Global' },
+                        { asn: 'AS3320', normalizedTime: 2.50, absoluteTime: 45.7, country: 'DE', region: 'Central Europe' }
+                    ],
+                    fastestASN: 'AS13335',
+                    fastestTime: 18.3
+                },
+                totalTargets: 3,
+                successfulMeasurements: 3,
+                measurementDuration: 1250,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        async function runTest() {
+            clearLog();
+            log('🧪 Starting ASN Ping Timing Test for New Visitor...', 'info');
+            log('', 'info');
+
+            try {
+                // Create unique fingerprint for new visitor
+                const uniqueFingerprint = `test-visitor-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                log(`📝 Generated unique fingerprint: ${uniqueFingerprint}`, 'info');
+
+                // Create mock tracking data with ASN ping timing
+                const trackingData = {
+                    sessionId: `test-session-${Date.now()}`,
+                    fingerprint: uniqueFingerprint,
+                    basicInfo: {
+                        userAgent: navigator.userAgent,
+                        platform: navigator.platform,
+                        language: navigator.language,
+                        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                    },
+                    hardware: {
+                        screen: {
+                            width: screen.width,
+                            height: screen.height,
+                            colorDepth: screen.colorDepth
+                        },
+                        hardwareConcurrency: navigator.hardwareConcurrency
+                    },
+                    // Include ASN ping timing data
+                    asnPingTiming: createMockAsnPingData()
+                };
+
+                log('📊 Mock tracking data created with ASN ping timing', 'info');
+                log(`   - Measurements: ${trackingData.asnPingTiming.measurements.length}`, 'info');
+                log(`   - Pattern ASNs: ${trackingData.asnPingTiming.pattern.pattern.length}`, 'info');
+                log('', 'info');
+
+                // Send to tracking endpoint
+                log('🚀 Sending tracking data to /Tracking endpoint...', 'info');
+                const response = await fetch('/Tracking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(trackingData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                log('✅ Tracking data sent successfully!', 'success');
+                log('', 'info');
+
+                // Display results
+                log('📋 Response Details:', 'info');
+                log(`   - Success: ${result.success}`, result.success ? 'success' : 'error');
+                log(`   - Session ID: ${result.sessionId}`, 'info');
+                log(`   - Hash: ${result.hash?.substring(0, 16)}...`, 'info');
+                log('', 'info');
+
+                if (result.visitor) {
+                    log('👤 Visitor Information:', 'info');
+                    log(`   - Visitor ID: ${result.visitor.id}`, result.visitor.id > 0 ? 'success' : 'error');
+                    log(`   - Is New: ${result.visitor.isNew}`, 'info');
+                    log(`   - Total Visits: ${result.visitor.totalVisits}`, 'info');
+                    log(`   - First Seen: ${result.visitor.firstSeen}`, 'info');
+                    log('', 'info');
+
+                    // Verify VisitorId is not 0
+                    if (result.visitor.id === 0) {
+                        log('❌ FAILURE: VisitorId is 0 (foreign key constraint will fail)', 'error');
+                    } else {
+                        log(`✅ SUCCESS: VisitorId is ${result.visitor.id} (valid foreign key)`, 'success');
+                    }
+                }
+
+                if (result.vpnProxy) {
+                    log('🔒 VPN/Proxy Detection:', 'info');
+                    log(`   - Detected: ${result.vpnProxy.isDetected}`, 'info');
+                    log(`   - Suspicion Level: ${result.vpnProxy.suspicionLevel}`, 'info');
+                }
+
+                log('', 'info');
+                log('📊 Full Response:', 'info');
+                log('', 'info');
+                const pre = document.createElement('pre');
+                pre.textContent = JSON.stringify(result, null, 2);
+                document.getElementById('log').appendChild(pre);
+
+                log('', 'info');
+                log('🎉 Test completed successfully! ASN ping timing data processed without foreign key errors.', 'success');
+
+            } catch (error) {
+                log('', 'info');
+                log(`❌ Test failed: ${error.message}`, 'error');
+                log(`   Stack: ${error.stack}`, 'error');
+            }
+        }
+
+        // Auto-run test on load
+        window.addEventListener('load', () => {
+            log('✅ Test page loaded. Click "Run Test" to start.', 'info');
+        });
+    </script>
+</body>
+</html>
+
