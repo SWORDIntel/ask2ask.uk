@@ -1,0 +1,56 @@
+# Build artifacts
+bin/
+obj/
+publish/
+*.dll
+*.pdb
+*.exe
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.bk
+*.backup
+
+# Logs
+*.log
+logs/
+
+# Test files
+TestResults/
+*.trx
+*.coverage
+
+# Tracking data (will be in volume)
+TrackingData/
+

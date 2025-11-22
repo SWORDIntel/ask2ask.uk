@@ -684,6 +684,12 @@
             console.log('%c✓ Novel techniques applied', 'color: green; font-weight: bold;');
         }
 
+        // ASN Ping Timing Discovery (location inference via latency triangulation)
+        if (window.ASNPingTiming && window.asnPingTimingData) {
+            console.log('%c🌐 ASN Ping Timing Data Available', 'color: cyan; font-weight: bold;');
+            collectedData.asnPingTiming = window.asnPingTimingData;
+        }
+
         // Request geolocation (will prompt user)
         getGeolocation();
 

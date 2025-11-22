@@ -53,7 +53,82 @@ dotnet publish -c Release -o ./publish
 
 ## Deployment
 
-This application can be deployed to:
+### Docker + Caddy (Recommended for Production)
+
+This application is configured to run securely in Docker with Caddy as a reverse proxy, providing automatic HTTPS and comprehensive security headers.
+
+#### Prerequisites
+- Docker and Docker Compose installed
+- Domain name (ask2ask.uk) pointing to your server's IP address
+- Ports 80 and 443 open on your firewall
+
+#### Quick Start
+
+1. **Clone and navigate to the project:**
+   ```bash
+   cd ask2ask.uk
+   ```
+
+2. **Start the services:**
+   ```bash
+   docker-compose up -d
+   ```
+
+3. **View logs:**
+   ```bash
+   docker-compose logs -f
+   ```
+
+4. **Stop the services:**
+   ```bash
+   docker-compose down
+   ```
+
+#### Configuration
+
+- **Caddyfile**: Configured for `ask2ask.uk` with automatic HTTPS via Let's Encrypt
+- **Ports**: Caddy exposes ports 80 (HTTP) and 443 (HTTPS) externally
+- **Internal**: ASP.NET Core app runs on port 8080 (internal only)
+- **Volumes**: 
+  - `tracking-data`: Persistent storage for tracking data
+  - `caddy-data`: Caddy's certificate storage
+  - `caddy-config`: Caddy's configuration storage
+
+#### Security Features
+
+- Automatic HTTPS with Let's Encrypt certificate management
+- Comprehensive security headers (HSTS, CSP, X-Frame-Options, etc.)
+- Container isolation with non-root user
+- Health checks and automatic restarts
+- Data persistence via Docker volumes
+
+#### Environment Variables
+
+The following environment variables are set in `docker-compose.yml`:
+- `ASPNETCORE_ENVIRONMENT=Production`
+- `ASPNETCORE_URLS=http://+:8080`
+- `ASPNETCORE_ALLOWEDHOSTS=ask2ask.uk`
+
+#### Updating the Application
+
+1. **Rebuild and restart:**
+   ```bash
+   docker-compose up -d --build
+   ```
+
+2. **View application logs:**
+   ```bash
+   docker-compose logs -f ask2ask-app
+   ```
+
+3. **View Caddy logs:**
+   ```bash
+   docker-compose logs -f caddy
+   ```
+
+#### Other Deployment Options
+
+This application can also be deployed to:
 - Azure App Service
 - IIS
 - Any hosting platform that supports ASP.NET Core

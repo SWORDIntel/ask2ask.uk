@@ -8,8 +8,8 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
-    color: #1a202c;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+    color: #e2e8f0;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 25%, #24243e 50%, #0f0c29 75%, #1a1a2e 100%);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     padding: 20px;
@@ -25,13 +25,13 @@ body {
 .container {
     max-width: 900px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(20, 20, 30, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 60px;
     border-radius: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(100, 100, 120, 0.3);
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -203,7 +203,7 @@ header {
     margin-bottom: 50px;
     padding-bottom: 30px;
     border-bottom: 2px solid transparent;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent) bottom;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.3), transparent) bottom;
     background-size: 100% 2px;
     background-repeat: no-repeat;
 }
@@ -211,7 +211,7 @@ header {
 h1 {
     font-size: 3.5em;
     font-weight: 800;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #ff4757 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -227,7 +227,7 @@ h1 {
 
 .tagline {
     font-size: 1.3em;
-    color: #4a5568;
+    color: #94a3b8;
     font-style: italic;
     font-weight: 500;
 }
@@ -246,13 +246,13 @@ section {
 h2 {
     font-size: 2.2em;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 20px;
     padding-left: 20px;
-    border-left: 5px solid #667eea;
+    border-left: 5px solid #ff6b6b;
     letter-spacing: -0.01em;
     transition: transform 0.3s ease;
 }
@@ -263,20 +263,20 @@ h2:hover {
 
 p {
     margin-bottom: 15px;
-    color: #2d3748;
+    color: #cbd5e1;
     font-size: 1.05em;
 }
 
 /* Chat Examples */
 .chat-example {
-    background: rgba(248, 249, 250, 0.6);
+    background: rgba(30, 30, 40, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 16px;
     padding: 25px;
     margin: 25px 0;
-    border: 2px solid rgba(200, 200, 200, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(100, 100, 120, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
 }
 
@@ -286,14 +286,14 @@ p {
 }
 
 .chat-example.bad {
-    background: rgba(255, 235, 238, 0.7);
-    border: 2px solid rgba(231, 76, 60, 0.3);
+    background: rgba(60, 20, 20, 0.8);
+    border: 2px solid rgba(231, 76, 60, 0.5);
     border-left: 6px solid #e74c3c;
 }
 
 .chat-example.good {
-    background: rgba(232, 245, 233, 0.7);
-    border: 2px solid rgba(39, 174, 96, 0.3);
+    background: rgba(20, 60, 30, 0.8);
+    border: 2px solid rgba(39, 174, 96, 0.5);
     border-left: 6px solid #27ae60;
 }
 
@@ -302,35 +302,36 @@ p {
     font-family: 'JetBrains Mono', 'Courier New', monospace;
     font-size: 0.98em;
     padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(40, 40, 50, 0.6);
     border-radius: 8px;
     transition: background 0.2s ease;
+    color: #e2e8f0;
 }
 
 .message:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(50, 50, 60, 0.8);
 }
 
 .user {
     font-weight: bold;
-    color: #667eea;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: #ff6b6b;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .waiting, .response {
     margin: 15px 0;
     font-style: italic;
-    color: #718096;
+    color: #94a3b8;
     font-weight: 500;
 }
 
 .explanation {
-    background: linear-gradient(135deg, rgba(255, 243, 205, 0.9) 0%, rgba(255, 193, 7, 0.2) 100%);
-    border: 2px solid rgba(255, 193, 7, 0.4);
+    background: linear-gradient(135deg, rgba(80, 40, 20, 0.9) 0%, rgba(100, 50, 20, 0.6) 100%);
+    border: 2px solid rgba(255, 140, 50, 0.4);
     padding: 20px;
     border-radius: 12px;
     margin: 25px 0;
-    box-shadow: 0 4px 16px rgba(255, 193, 7, 0.15);
+    box-shadow: 0 4px 16px rgba(255, 140, 50, 0.2);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
@@ -351,7 +352,7 @@ ul {
 
 li {
     margin-bottom: 16px;
-    color: #2d3748;
+    color: #cbd5e1;
     line-height: 1.7;
     transition: transform 0.2s ease;
 }
@@ -361,7 +362,7 @@ li:hover {
 }
 
 li strong {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -385,26 +386,26 @@ li strong {
 }
 
 .bad-examples p {
-    background: linear-gradient(135deg, rgba(255, 235, 238, 0.9) 0%, rgba(255, 205, 210, 0.5) 100%);
-    color: #c62828;
+    background: linear-gradient(135deg, rgba(80, 30, 30, 0.9) 0%, rgba(100, 40, 40, 0.7) 100%);
+    color: #ff6b6b;
     border-left: 4px solid #e74c3c;
 }
 
 .good-examples p {
-    background: linear-gradient(135deg, rgba(232, 245, 233, 0.9) 0%, rgba(200, 230, 201, 0.5) 100%);
-    color: #2e7d32;
+    background: linear-gradient(135deg, rgba(30, 80, 40, 0.9) 0%, rgba(40, 100, 50, 0.7) 100%);
+    color: #4ade80;
     border-left: 4px solid #27ae60;
 }
 
 /* Blockquote */
 blockquote {
-    background: linear-gradient(135deg, rgba(236, 240, 241, 0.8) 0%, rgba(189, 195, 199, 0.3) 100%);
-    border-left: 6px solid #667eea;
+    background: linear-gradient(135deg, rgba(40, 40, 50, 0.8) 0%, rgba(50, 50, 60, 0.6) 100%);
+    border-left: 6px solid #ff6b6b;
     margin: 30px 0;
     padding: 30px;
     font-size: 1.15em;
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     transition: all 0.3s ease;
@@ -417,7 +418,7 @@ blockquote:hover {
 
 blockquote p {
     margin-bottom: 12px;
-    color: #2d3748;
+    color: #e2e8f0;
 }
 
 blockquote strong {
@@ -435,11 +436,11 @@ blockquote strong {
 /* Share Section */
 .share {
     text-align: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     color: white;
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -464,7 +465,7 @@ blockquote strong {
 
 .share:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 12px 40px rgba(255, 107, 107, 0.4);
 }
 
 .share-text {
@@ -491,15 +492,15 @@ footer {
     margin-top: 50px;
     padding-top: 30px;
     border-top: 2px solid transparent;
-    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent) top;
+    background: linear-gradient(90deg, transparent, rgba(255, 107, 107, 0.3), transparent) top;
     background-size: 100% 2px;
     background-repeat: no-repeat;
-    color: #718096;
+    color: #94a3b8;
     font-size: 0.95em;
 }
 
 footer a {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -516,7 +517,7 @@ footer a::after {
     height: 2px;
     bottom: -2px;
     left: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     transition: width 0.3s ease;
 }
 
