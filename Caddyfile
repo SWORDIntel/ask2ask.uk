@@ -1,4 +1,4 @@
-ask2ask.uk {
+ask2ask.com {
     # Reverse proxy to ASP.NET Core app
     reverse_proxy ask2ask-app:8080 {
         # Health check
@@ -53,4 +53,3 @@ ask2ask.uk {
     # Automatic HTTPS with Let's Encrypt
     # Caddy will automatically obtain and renew certificates
 }
-

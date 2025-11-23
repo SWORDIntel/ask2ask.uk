@@ -315,7 +315,6 @@ SELECT * FROM VPNProxyDetections WHERE IsLikelyVPNOrProxy = 1;
 
 The system is deployed with Docker + Caddy:
 - **URL**: http://localhost:9080/Index (development)
-- **Production**: https://ask2ask.uk (with SSL)
+- **Production**: https://ask2ask.com (with SSL)
 - **Database**: Persisted in Docker volume
 - **Logs**: Console + daily JSONL files
-

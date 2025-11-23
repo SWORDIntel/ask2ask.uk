@@ -1,4 +1,4 @@
-# Ask2Ask.uk
+# Ask2Ask.com
 
 A single-page ASP.NET Core website that makes fun of people who ask to ask questions instead of just asking the question.
 
@@ -59,14 +59,14 @@ This application is configured to run securely in Docker with Caddy as a reverse
 
 #### Prerequisites
 - Docker and Docker Compose installed
-- Domain name (ask2ask.uk) pointing to your server's IP address
+- Domain name (ask2ask.com) pointing to your server's IP address
 - Ports 80 and 443 open on your firewall
 
 #### Quick Start
 
 1. **Clone and navigate to the project:**
    ```bash
-   cd ask2ask.uk
+   cd ask2ask.com
    ```
 
 2. **Start the services:**
@@ -86,7 +86,7 @@ This application is configured to run securely in Docker with Caddy as a reverse
 
 #### Configuration
 
-- **Caddyfile**: Configured for `ask2ask.uk` with automatic HTTPS via Let's Encrypt
+- **Caddyfile**: Configured for `ask2ask.com` with automatic HTTPS via Let's Encrypt
 - **Ports**: Caddy exposes ports 80 (HTTP) and 443 (HTTPS) externally
 - **Internal**: ASP.NET Core app runs on port 8080 (internal only)
 - **Volumes**: 
@@ -107,7 +107,7 @@ This application is configured to run securely in Docker with Caddy as a reverse
 The following environment variables are set in `docker-compose.yml`:
 - `ASPNETCORE_ENVIRONMENT=Production`
 - `ASPNETCORE_URLS=http://+:8080`
-- `ASPNETCORE_ALLOWEDHOSTS=ask2ask.uk`
+- `ASPNETCORE_ALLOWEDHOSTS=ask2ask.com`
 
 #### Updating the Application
 

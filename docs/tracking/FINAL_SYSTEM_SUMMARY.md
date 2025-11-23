@@ -13,9 +13,9 @@ All tracking data is now stored exclusively in SQLite database with comprehensiv
        │
        ▼
 ┌─────────────────────────────────┐
-│  Browser Fingerprinting Scripts │
-│  - Canvas, WebGL, Audio         │
-│  - Hardware, Network, Behavioral│
+│   Browser Fingerprinting Scripts │
+│   - Canvas, WebGL, Audio         │
+│   - Hardware, Network, Behavioral│
 └──────────────┬──────────────────┘
                │
                ▼ POST /Tracking
@@ -167,7 +167,7 @@ Query database with actions:
 
 ### Files Structure
 ```
-ask2ask.uk/
+ask2ask.com/
 ├── Data/
 │   └── TrackingDbContext.cs          # Database models
 ├── Services/
@@ -303,4 +303,3 @@ docker-compose up -d --build
 🎯 **Purpose**: Educational demonstration of web tracking and VPN detection techniques
 
 ⚠️ **Note**: Always obtain user consent and comply with privacy laws
-

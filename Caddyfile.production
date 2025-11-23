@@ -1,8 +1,8 @@
-# Production Caddyfile for ask2ask.uk
+# Production Caddyfile for ask2ask.com
 # CNSA 2.0 Compliant with mTLS for API endpoints
 
 # Main site - public access
-ask2ask.uk {
+ask2ask.com {
     # Reverse proxy to ASP.NET Core app
     reverse_proxy ask2ask-app:8080 {
         health_uri /Index
@@ -42,7 +42,7 @@ ask2ask.uk {
 
 # API endpoints - telemetry network only
 # Requires mTLS client certificate for authentication
-api.ask2ask.uk {
+api.ask2ask.com {
     # Only allow connections from telemetry network
     @not_telemetry {
         not remote_ip 10.10.0.0/24 172.20.0.0/16
@@ -107,7 +107,7 @@ api.ask2ask.uk {
 
 # Internal telemetry endpoint - telemetry network only
 # No mTLS required, but network-isolated
-telemetry.ask2ask.uk {
+telemetry.ask2ask.com {
     # Only allow connections from telemetry network
     @not_telemetry {
         not remote_ip 10.10.0.0/24 172.20.0.0/16
@@ -133,7 +133,7 @@ telemetry.ask2ask.uk {
 }
 
 # Health check endpoint - no authentication
-health.ask2ask.uk {
+health.ask2ask.com {
     respond /health "OK" 200
     
     log {
@@ -141,4 +141,3 @@ health.ask2ask.uk {
         format json
     }
 }
-

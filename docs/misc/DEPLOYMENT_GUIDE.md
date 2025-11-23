@@ -23,7 +23,7 @@ This guide covers deploying Ask2Ask with:
 └────────────────┬───────────────────────┬────────────────────┘
                  │                       │
          ┌───────▼────────┐      ┌──────▼──────────┐
-         │  ask2ask.uk    │      │ api.ask2ask.uk  │
+         │  ask2ask.com   │      │ api.ask2ask.com │
          │   (Public)     │      │  (Telemetry)    │
          └───────┬────────┘      └──────┬──────────┘
                  │                      │
@@ -61,11 +61,11 @@ This guide covers deploying Ask2Ask with:
 - **Docker Compose**: 2.0+
 
 ### Domain Setup
-- Domain name (e.g., `ask2ask.uk`)
+- Domain name (e.g., `ask2ask.com`)
 - DNS A records:
-  - `ask2ask.uk` → Server IP
-  - `api.ask2ask.uk` → Server IP
-  - `telemetry.ask2ask.uk` → Server IP (optional)
+  - `ask2ask.com` → Server IP
+  - `api.ask2ask.com` → Server IP
+  - `telemetry.ask2ask.com` → Server IP (optional)
 
 ### Firewall
 - Port 80 (HTTP) - Open
@@ -80,8 +80,8 @@ This guide covers deploying Ask2Ask with:
 
 ```bash
 cd /opt
-git clone https://github.com/yourusername/ask2ask.uk.git
-cd ask2ask.uk
+git clone https://github.com/yourusername/ask2ask.com.git
+cd ask2ask.com
 ```
 
 ### 1.2 Generate API Keys
@@ -230,11 +230,11 @@ nano Caddyfile.production
 Verify domain names are correct:
 
 ```caddyfile
-ask2ask.uk {
+ask2ask.com {
     # Main site configuration
 }
 
-api.ask2ask.uk {
+api.ask2ask.com {
     # API configuration with mTLS
 }
 ```
@@ -249,7 +249,7 @@ Ensure correct domain:
 
 ```json
 {
-  "AllowedHosts": "ask2ask.uk,api.ask2ask.uk,localhost,ask2ask-app"
+  "AllowedHosts": "ask2ask.com,api.ask2ask.com,localhost,ask2ask-app"
 }
 ```
 
@@ -282,7 +282,7 @@ docker ps
 
 # Check networks
 docker network ls
-docker network inspect ask2askuk_telemetry-network
+docker network inspect ask2askcom_telemetry-network
 
 # Check volumes
 docker volume ls
@@ -295,7 +295,7 @@ docker volume ls
 ### 5.1 Test Public Site
 
 ```bash
-curl -I https://ask2ask.uk
+curl -I https://ask2ask.com
 ```
 
 Expected: `200 OK` with security headers
@@ -304,11 +304,11 @@ Expected: `200 OK` with security headers
 
 ```bash
 # Stats endpoint
-curl "https://api.ask2ask.uk/api/stats" \
+curl "https://api.ask2ask.com/api/stats" \
   -H "X-API-Key: your-read-key"
 
 # Export endpoint (requires mTLS)
-curl "https://api.ask2ask.uk/api/export?format=json&limit=1" \
+curl "https://api.ask2ask.com/api/export?format=json&limit=1" \
   -H "X-API-Key: your-export-key" \
   --cert certs/client-cert.pem \
   --key certs/client-key.pem \
@@ -321,12 +321,12 @@ On your local machine:
 
 ```bash
 # Copy client certificates
-scp user@server:/opt/ask2ask.uk/certs/client-cert.pem .
-scp user@server:/opt/ask2ask.uk/certs/client-key.pem .
-scp user@server:/opt/ask2ask.uk/certs/ca.crt .
+scp user@server:/opt/ask2ask.com/certs/client-cert.pem .
+scp user@server:/opt/ask2ask.com/certs/client-key.pem .
+scp user@server:/opt/ask2ask.com/certs/ca.crt .
 
 # Test API
-curl "https://api.ask2ask.uk/api/stats" \
+curl "https://api.ask2ask.com/api/stats" \
   -H "X-API-Key: your-read-key"
 ```
 
@@ -337,7 +337,7 @@ curl "https://api.ask2ask.uk/api/stats" \
 ### 6.1 Export Data
 
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=bulk" \
+curl "https://api.ask2ask.com/api/export?format=bulk" \
   -H "X-API-Key: your-export-key" \
   --cert certs/client-cert.pem \
   --key certs/client-key.pem \
@@ -363,7 +363,7 @@ Add:
 
 ```cron
 # Export to Elasticsearch every hour
-0 * * * * /opt/ask2ask.uk/scripts/sync-to-elasticsearch.sh
+0 * * * * /opt/ask2ask.com/scripts/sync-to-elasticsearch.sh
 ```
 
 Create sync script:
@@ -377,11 +377,11 @@ nano scripts/sync-to-elasticsearch.sh
 EXPORT_KEY="your-export-key"
 ES_URL="https://your-elasticsearch:9200"
 
-curl -s "https://api.ask2ask.uk/api/export?format=bulk&since=$(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S)" \
+curl -s "https://api.ask2ask.com/api/export?format=bulk&since=$(date -u -d '1 hour ago' +%Y-%m-%dT%H:%M:%S)" \
   -H "X-API-Key: $EXPORT_KEY" \
-  --cert /opt/ask2ask.uk/certs/client-cert.pem \
-  --key /opt/ask2ask.uk/certs/client-key.pem \
-  --cacert /opt/ask2ask.uk/certs/ca.crt | \
+  --cert /opt/ask2ask.com/certs/client-cert.pem \
+  --key /opt/ask2ask.com/certs/client-key.pem \
+  --cacert /opt/ask2ask.com/certs/ca.crt | \
 curl -s -X POST "$ES_URL/_bulk" \
   -H "Content-Type: application/x-ndjson" \
   --data-binary @-
@@ -445,7 +445,7 @@ Add to cron:
 
 ```cron
 # Daily backup at 2 AM
-0 2 * * * /opt/ask2ask.uk/scripts/backup-database.sh
+0 2 * * * /opt/ask2ask.com/scripts/backup-database.sh
 ```
 
 ### 7.3 Health Checks
@@ -469,8 +469,8 @@ if ! docker ps | grep -q ask2ask-caddy; then
 fi
 
 # Check if site is accessible
-if ! curl -s -o /dev/null -w "%{http_code}" https://ask2ask.uk | grep -q 200; then
-    curl -X POST $WEBHOOK_URL -d '{"text":"❌ ask2ask.uk is not responding!"}'
+if ! curl -s -o /dev/null -w "%{http_code}" https://ask2ask.com | grep -q 200; then
+    curl -X POST $WEBHOOK_URL -d '{"text":"❌ ask2ask.com is not responding!"}'
 fi
 ```
 
@@ -482,7 +482,7 @@ Add to cron:
 
 ```cron
 # Health check every 5 minutes
-*/5 * * * * /opt/ask2ask.uk/scripts/health-check.sh
+*/5 * * * * /opt/ask2ask.com/scripts/health-check.sh
 ```
 
 ---
@@ -558,7 +558,7 @@ systemctl status docker
 
 ```bash
 # Verify network
-docker network inspect ask2askuk_telemetry-network
+docker network inspect ask2askcom_telemetry-network
 
 # Check if telemetry network is internal
 # If yes, API only accessible from within Docker network
@@ -606,7 +606,7 @@ docker-compose up -d --build
 ### Update Application
 
 ```bash
-cd /opt/ask2ask.uk
+cd /opt/ask2ask.com
 git pull
 docker-compose down
 docker-compose up -d --build
@@ -615,7 +615,7 @@ docker-compose up -d --build
 ### Update Certificates (Annual)
 
 ```bash
-cd /opt/ask2ask.uk/certs
+cd /opt/ask2ask.com/certs
 
 # Generate new client cert
 openssl req -newkey rsa:4096 -sha384 -nodes \
@@ -652,7 +652,7 @@ docker-compose restart
 - [ ] Database backup cron job created
 - [ ] Health check monitoring configured
 - [ ] Elasticsearch integration tested
-- [ ] SSL certificates verified (Let's Encrypt)
+- [ ] SSL certificates verified (Let\'s Encrypt)
 - [ ] API endpoints tested with mTLS
 - [ ] Rate limiting verified
 - [ ] Security headers verified
@@ -669,4 +669,3 @@ For issues:
 ---
 
 **Production Ready | CNSA 2.0 Compliant | Secure by Design**
-

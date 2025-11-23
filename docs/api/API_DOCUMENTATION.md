@@ -37,10 +37,10 @@ The Ask2Ask API provides secure access to tracking data with CNSA 2.0 compliant 
 ```
 Internet
   │
-  ├─> ask2ask.uk (Public)
+  ├─> ask2ask.com (Public)
   │   └─> Caddy (172.20.0.20) ──> ASP.NET App (172.20.0.10)
   │
-  └─> api.ask2ask.uk (Telemetry Network Only)
+  └─> api.ask2ask.com (Telemetry Network Only)
       └─> Caddy (10.10.0.20) ──[ZKP]──> ASP.NET App (10.10.0.10)
 ```
 
@@ -57,7 +57,7 @@ localhost:9080 (HTTP)
 
 ### Base URLs
 
-- **Production**: `https://api.ask2ask.uk`
+- **Production**: `https://api.ask2ask.com`
 - **Local Testing**: `http://localhost:9080`
 
 ---
@@ -108,7 +108,7 @@ X-API-Key: <your-read-api-key>
 ### Example
 
 ```bash
-curl "https://api.ask2ask.uk/api/stats" \
+curl "https://api.ask2ask.com/api/stats" \
   -H "X-API-Key: your-read-api-key"
 ```
 
@@ -169,7 +169,7 @@ X-API-Key: <your-read-api-key>
 ### Example
 
 ```bash
-curl "https://api.ask2ask.uk/api/visits?page=1&pageSize=100" \
+curl "https://api.ask2ask.com/api/visits?page=1&pageSize=100" \
   -H "X-API-Key: your-read-api-key"
 ```
 
@@ -233,7 +233,7 @@ X-API-Key: <your-read-api-key>
 ### Example
 
 ```bash
-curl "https://api.ask2ask.uk/api/visitor?hash=abc123..." \
+curl "https://api.ask2ask.com/api/visitor?hash=abc123..." \
   -H "X-API-Key: your-read-api-key"
 ```
 
@@ -271,7 +271,7 @@ X-API-Key: <your-export-api-key>
 Streaming format, one JSON object per line. Ideal for large datasets.
 
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=ndjson" \
+curl "https://api.ask2ask.com/api/export?format=ndjson" \
   -H "X-API-Key: your-export-api-key" \
   --cert client-cert.pem \
   --key client-key.pem \
@@ -282,7 +282,7 @@ curl "https://api.ask2ask.uk/api/export?format=ndjson" \
 Standard JSON array. Good for small datasets.
 
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=json&limit=100" \
+curl "https://api.ask2ask.com/api/export?format=json&limit=100" \
   -H "X-API-Key: your-export-api-key" \
   --cert client-cert.pem \
   --key client-key.pem \
@@ -293,7 +293,7 @@ curl "https://api.ask2ask.uk/api/export?format=json&limit=100" \
 Ready for direct import into Elasticsearch.
 
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=bulk" \
+curl "https://api.ask2ask.com/api/export?format=bulk" \
   -H "X-API-Key: your-export-api-key" \
   --cert client-cert.pem \
   --key client-key.pem \
@@ -357,7 +357,7 @@ Each record includes:
 ### 1. Generate API Keys
 
 ```bash
-cd /home/john/Documents/ask2ask.uk
+cd /home/john/Documents/ask2ask.com
 bash scripts/generate-api-keys.sh
 ```
 
@@ -398,7 +398,7 @@ For ZKP authentication on export endpoints:
 
 ```bash
 # Generate ECDSA P-384 key pair
-cd /opt/ask2ask.uk
+cd /opt/ask2ask.com
 bash scripts/generate-zkp-keypair.sh
 ```
 
@@ -513,8 +513,8 @@ caddy:
 ### 2. Configure DNS
 
 ```
-ask2ask.uk        A    your-server-ip
-api.ask2ask.uk    A    your-server-ip
+ask2ask.com        A    your-server-ip
+api.ask2ask.com    A    your-server-ip
 ```
 
 ### 3. Deploy
@@ -528,10 +528,10 @@ docker-compose up -d --build
 
 ```bash
 # Test public site
-curl https://ask2ask.uk
+curl https://ask2ask.com
 
 # Test API (from telemetry network only)
-curl https://api.ask2ask.uk/api/stats \
+curl https://api.ask2ask.com/api/stats \
   -H "X-API-Key: your-api-key"
 ```
 
@@ -542,7 +542,7 @@ curl https://api.ask2ask.uk/api/stats \
 ### 1. Export data
 
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=bulk" \
+curl "https://api.ask2ask.com/api/export?format=bulk" \
   -H "X-API-Key: your-export-key" \
   --cert client-cert.pem \
   --key client-key.pem \
@@ -582,9 +582,8 @@ The exported data includes all 130+ tracking fields, ready for visualization in 
 For issues or questions:
 - Check logs: `docker logs ask2ask-app`
 - Review Caddy logs: `docker logs ask2ask-caddy`
-- Verify network: `docker network inspect ask2askuk_telemetry-network`
+- Verify network: `docker network inspect ask2askcom_telemetry-network`
 
 ---
 
 **CNSA 2.0 Compliant | Secure by Design | Production Ready**
-

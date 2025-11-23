@@ -34,7 +34,7 @@ public class ZkpApiClient
     private readonly string _baseUrl;
     private readonly HttpClient _httpClient;
 
-    public ZkpApiClient(string apiKey, string privateKeyBase64, string baseUrl = "https://api.ask2ask.uk")
+    public ZkpApiClient(string apiKey, string privateKeyBase64, string baseUrl = "https://api.ask2ask.com")
     {
         _apiKey = apiKey;
         _privateKeyBase64 = privateKeyBase64;
@@ -124,7 +124,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.backends import default_backend
 
 class ZkpApiClient:
-    def __init__(self, api_key, private_key_base64, base_url="https://api.ask2ask.uk"):
+    def __init__(self, api_key, private_key_base64, base_url="https://api.ask2ask.com"):
         self.api_key = api_key
         self.base_url = base_url
         self.private_key = serialization.load_der_private_key(
@@ -207,7 +207,7 @@ print(response)
 
 API_KEY="your-api-key"
 PRIVATE_KEY_FILE="private-key.pem"
-BASE_URL="https://api.ask2ask.uk"
+BASE_URL="https://api.ask2ask.com"
 
 # Function to compute SHA-384 hash
 compute_sha384() {
@@ -269,7 +269,7 @@ const crypto = require('crypto');
 const https = require('https');
 
 class ZkpApiClient {
-    constructor(apiKey, privateKeyBase64, baseUrl = 'https://api.ask2ask.uk') {
+    constructor(apiKey, privateKeyBase64, baseUrl = 'https://api.ask2ask.com') {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         this.privateKey = crypto.createPrivateKey({
@@ -363,7 +363,7 @@ client.makeRequest('GET', '/api/export?format=json&limit=10')
 Generate a key pair using the provided script:
 
 ```bash
-cd /path/to/ask2ask.uk
+cd /path/to/ask2ask.com
 bash scripts/generate-zkp-keypair.sh
 ```
 
@@ -396,4 +396,3 @@ This will generate:
 ### "Timestamp out of window"
 - Ensure system clock is synchronized (use NTP)
 - Check timestamp is Unix epoch seconds (not milliseconds)
-

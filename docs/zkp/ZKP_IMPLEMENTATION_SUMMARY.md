@@ -111,7 +111,7 @@ Successfully replaced mTLS certificate authentication with Zero Knowledge Proof 
 ### Generate Key Pair
 
 ```bash
-cd /opt/ask2ask.uk
+cd /opt/ask2ask.com
 bash scripts/generate-zkp-keypair.sh
 ```
 
@@ -233,4 +233,3 @@ bash scripts/generate-zkp-keypair.sh
 ---
 
 **CNSA 2.0 Compliant | Zero Knowledge Proof | Production Ready**
-

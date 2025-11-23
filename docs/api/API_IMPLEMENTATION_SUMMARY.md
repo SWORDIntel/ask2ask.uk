@@ -69,7 +69,7 @@ ask2ask-caddy:
 - `Caddyfile.production` - Production configuration with mTLS
 
 **Features:**
-- ✅ Separate domains (ask2ask.uk, api.ask2ask.uk)
+- ✅ Separate domains (ask2ask.com, api.ask2ask.com)
 - ✅ mTLS for API endpoints
 - ✅ TLS 1.3 with CNSA 2.0 cipher suites
 - ✅ Network-based access control
@@ -229,7 +229,7 @@ Ask2Ask API → Export Endpoint → NDJSON/Bulk Format → Elasticsearch → Kib
 
 **1. Manual Export:**
 ```bash
-curl "https://api.ask2ask.uk/api/export?format=bulk" \
+curl "https://api.ask2ask.com/api/export?format=bulk" \
   -H "X-API-Key: export-key" \
   --cert client-cert.pem \
   --key client-key.pem | \
@@ -241,7 +241,7 @@ curl -X POST "https://elasticsearch:9200/_bulk" \
 **2. Automated Sync (Cron):**
 ```bash
 # Every hour, export new data
-0 * * * * /opt/ask2ask.uk/scripts/sync-to-elasticsearch.sh
+0 * * * * /opt/ask2ask.com/scripts/sync-to-elasticsearch.sh
 ```
 
 **3. Real-time Streaming:**
@@ -275,7 +275,7 @@ curl -X POST "https://elasticsearch:9200/_bulk" \
   "vpnProxy": {
     "isLikelyVPNOrProxy": true,
     "suspicionLevel": "High",
-    "detectionIndicators": [...]
+    "detectionIndicators": [...] 
   }
 }
 ```
@@ -328,9 +328,9 @@ curl -X POST "https://elasticsearch:9200/_bulk" \
    ```
 
 5. **Verify**
-   - Test public site: `https://ask2ask.uk`
-   - Test API: `https://api.ask2ask.uk/api/stats`
-   - Test export: `https://api.ask2ask.uk/api/export`
+   - Test public site: `https://ask2ask.com`
+   - Test API: `https://api.ask2ask.com/api/stats`
+   - Test export: `https://api.ask2ask.com/api/export`
 
 ---
 
@@ -339,21 +339,21 @@ curl -X POST "https://elasticsearch:9200/_bulk" \
 ### 1. Get Statistics
 
 ```bash
-curl "https://api.ask2ask.uk/api/stats" \
+curl "https://api.ask2ask.com/api/stats" \
   -H "X-API-Key: your-read-key"
 ```
 
 ### 2. Get Recent Visits
 
 ```bash
-curl "https://api.ask2ask.uk/api/visits?page=1&pageSize=50" \
+curl "https://api.ask2ask.com/api/visits?page=1&pageSize=50" \
   -H "X-API-Key: your-read-key"
 ```
 
 ### 3. Get Visitor Details
 
 ```bash
-curl "https://api.ask2ask.uk/api/visitor?hash=abc123..." \
+curl "https://api.ask2ask.com/api/visitor?hash=abc123..." \
   -H "X-API-Key: your-read-key"
 ```
 
@@ -361,7 +361,7 @@ curl "https://api.ask2ask.uk/api/visitor?hash=abc123..." \
 
 ```bash
 # Export last 24 hours
-curl "https://api.ask2ask.uk/api/export?format=bulk&since=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%S)" \
+curl "https://api.ask2ask.com/api/export?format=bulk&since=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%S)" \
   -H "X-API-Key: your-export-key" \
   --cert client-cert.pem \
   --key client-key.pem \
@@ -471,12 +471,12 @@ docker exec ask2ask-caddy cat /var/log/caddy/api-access.log
 
 ```bash
 # Check API health
-curl "https://api.ask2ask.uk/api/stats" \
+curl "https://api.ask2ask.com/api/stats" \
   -H "X-API-Key: your-key"
 
 # Check rate limiting
 for i in {1..105}; do
-  curl -s "https://api.ask2ask.uk/api/stats" \
+  curl -s "https://api.ask2ask.com/api/stats" \
     -H "X-API-Key: your-key" | jq '.error'
 done
 ```
@@ -505,4 +505,3 @@ See `DEPLOYMENT_GUIDE.md` for detailed troubleshooting steps.
 ---
 
 **CNSA 2.0 Compliant | Secure by Design | Elasticsearch Ready**
-

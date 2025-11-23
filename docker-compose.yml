@@ -10,7 +10,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:8080
-      - ASPNETCORE_ALLOWEDHOSTS=ask2ask.uk
+      - ASPNETCORE_ALLOWEDHOSTS=ask2ask.com
     volumes:
       - tracking-data:/app/TrackingData
     networks:
@@ -71,4 +71,3 @@ networks:
     ipam:
       config:
         - subnet: 10.10.0.0/24
-
