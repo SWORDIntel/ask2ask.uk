@@ -14,12 +14,14 @@ public class AsnPingTimingService
 {
     private readonly TrackingDbContext _context;
     private readonly ILogger<AsnPingTimingService> _logger;
+    private readonly AsnHelperService _asnHelper;
 
-    public AsnPingTimingService(TrackingDbContext context, ILogger<AsnPingTimingService> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
+    public AsnPingTimingService(TrackingDbContext context, ILogger<AsnPingTimingService> logger, AsnHelperService? asnHelper = null)
+        {
+            _context = context;
+            _logger = logger;
+            _asnHelper = asnHelper ?? new AsnHelperService(logger);
+        }
 
     /// <summary>
     /// Store ASN ping timing measurements for a visit
@@ -42,16 +44,36 @@ public class AsnPingTimingService
                 if (!measurement.TryGetProperty("success", out var success) || !success.GetBoolean())
                     continue;
 
+                // Extract target IP for ASN enrichment.
+                string? ip = null;
+                if (measurement.TryGetProperty("target", out var targetProp))
+                    ip = targetProp.GetString();
+
+                uint? asnNumber = null;
+                string? asnName = null;
+                string? asnCountry = null;
+
+                if (!string.IsNullOrWhiteSpace(ip))
+                {
+                    var asnInfo = await _asnHelper.QueryAsnInformationAsync(ip);
+                    if (asnInfo != null)
+                    {
+                        asnNumber = asnInfo.Asn;
+                        asnName = asnInfo.AsnName;
+                        asnCountry = asnInfo.Country;
+                    }
+                }
+
                 var pingTiming = new AsnPingTiming
                 {
                     VisitId = visitId,
                     MeasuredAt = DateTime.UtcNow,
-                    ASN = measurement.TryGetProperty("asn", out var asn) ? asn.GetString() ?? "" : "",
-                    ASNName = measurement.TryGetProperty("asnName", out var asnName) ? asnName.GetString() ?? "" : "",
-                    ASNCountry = measurement.TryGetProperty("country", out var country) ? country.GetString() : null,
-                    ASNRegion = measurement.TryGetProperty("region", out var region) ? region.GetString() : null,
-                    PingTarget = measurement.TryGetProperty("target", out var target) ? target.GetString() ?? "" : "",
-                    PingTargetType = measurement.TryGetProperty("targetType", out var targetType) ? targetType.GetString() ?? "" : "",
+                    ASN = asnNumber?.ToString() ?? measurement.TryGetProperty("asn", out var asnProp) ? asnProp.GetString() ?? "" : "",
+                    ASNName = asnName ?? measurement.TryGetProperty("asnName", out var asnNameProp) ? asnNameProp.GetString() ?? "" : "",
+                    ASNCountry = asnCountry ?? measurement.TryGetProperty("country", out var countryProp) ? countryProp.GetString() : null,
+                    ASNRegion = measurement.TryGetProperty("region", out var regionProp) ? regionProp.GetString() : null,
+                    PingTarget = ip ?? "",
+                    PingTargetType = measurement.TryGetProperty("targetType", out var targetTypeProp) ? targetTypeProp.GetString() ?? "" : "",
                     PingTime = measurement.TryGetProperty("average", out var avg) ? avg.GetDouble() : null,
                     MinPingTime = measurement.TryGetProperty("min", out var min) ? min.GetDouble() : null,
                     MaxPingTime = measurement.TryGetProperty("max", out var max) ? max.GetDouble() : null,
