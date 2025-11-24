@@ -61,18 +61,53 @@ Ask2Ask runs **multi-ASN ping timing** and keeps the receipts:
 - **Location inference** from timing (`InferredLatitude`, `InferredLongitude`, `LocationConfidence`)
 - **Pattern similarity** across visits:
   - `PatternSimilarity`, `MatchingASNs`, `AverageDeviation`
-- Flags when someone is clearly **behind a VPN** vs likely “true” region
+- Flags when someone is clearly **behind a VPN** vs likely "true" region
 
-Useful when you want more than “they used Cloudflare” and closer to “this is how they sit on the map and move over time.”
+Useful when you want more than "they used Cloudflare" and closer to "this is how they sit on the map and move over time."
 
-**Relevant bits:**  
-`AsnPingTiming.cs`, `AsnPingTimingService.cs`  
-`AsnHelperService.cs`  
+**Relevant bits:**
+`AsnPingTiming.cs`, `AsnPingTimingService.cs`
+`AsnHelperService.cs`
 `wwwroot/js/asn-ping-timing.js`
 
 ---
 
-### 🔐 4. CNSA-style API keys & ZKP-ish signatures
+### 🎯 4. Infers metro-level geolocation from network patterns
+
+Ask2Ask uses **probabilistic metro-area inference** combining ASN timing, network metadata, and behavioral signals:
+
+- **Heuristic engine** (always available):
+  - Rule-based inference from timezone, locale, ASN correlation
+  - Confidence 0.3–0.6 (soft signals)
+
+- **Optional ML engine** (LightGBM/XGBoost via ONNX):
+  - Trained classifier on network timing fingerprints
+  - Confidence 0.8–0.95 when model deployed
+  - Automatic fallback to heuristic if model unavailable
+
+- **Mismatch detection**:
+  - `vpnExitMismatch`: "VPN claims US, but pattern screams EU"
+  - `geoIpMismatch`: GeoIP location vs inferred discrepancy
+  - `timezoneMismatch`: Timezone offset doesn't fit region
+
+- **Regional breakdown**:
+  - 70 major metros seeded (Amsterdam, London, NYC, Tokyo, etc.)
+  - Top-3 candidate regions with confidence scores
+  - Per-visitor region summary across sessions
+
+**Key insight:** Metro-level only (no address targeting). Designed to detect lying VPNs and correlate visitor patterns, not to track individuals to buildings.
+
+**Relevant bits:**
+`Services/InferredRegionEngine.cs`, `Services/OnnxInferredRegionEngine.cs`
+`Services/CompositeInferredRegionEngine.cs`
+`Data/Regions.json`
+`docs/INFERRED_REGION_SYSTEM.md` (system overview & usage)
+`docs/INFERRED_REGION_MODEL_TRAINING.md` (end-to-end model training)
+`scripts/train_inferred_region_model.py` (LightGBM → ONNX pipeline)
+
+---
+
+### 🔐 5. CNSA-style API keys & ZKP-ish signatures
 
 The API isn’t “just slap a token header on it”:
 
@@ -102,34 +137,34 @@ The API isn’t “just slap a token header on it”:
 
 ---
 
-### 📊 5. Export the evidence (JSON, NDJSON, Elasticsearch bulk)
+### 📊 6. Export the evidence (JSON, NDJSON, Elasticsearch bulk)
 
 You get a small, sharp API surface:
 
-- `GET /api/stats`  
-  High-level stats: visitors, visits, VPN hits, etc.  
+- `GET /api/stats`
+  High-level stats: visitors, visits, VPN hits, etc.
   **Requires:** `read` scope.
 
-- `GET /api/visits?page=&pageSize=`  
-  Paginated visit feed with fingerprint + VPN metadata.  
+- `GET /api/visits?page=&pageSize=`
+  Paginated visit feed with fingerprint + VPN metadata + **inferred region**.
   **Requires:** `read` scope.
 
-- `GET /api/visitor?hash=<fingerprintHash>`  
-  Full visitor drill-down (visits + VPN history + timing).  
+- `GET /api/visitor?hash=<fingerprintHash>`
+  Full visitor drill-down (visits + VPN history + timing + **region pattern summary**).
   **Requires:** `read` scope.
 
-- `GET /api/export?format=ndjson|json|bulk&since=YYYY-MM-DD`  
+- `GET /api/export?format=ndjson|json|bulk&since=YYYY-MM-DD`
   Machine-friendly exports:
   - `ndjson` – one JSON per line
   - `json` – array of records
-  - `bulk` – Elasticsearch bulk format (action + doc)  
+  - `bulk` – Elasticsearch bulk format (action + doc)
 
   **Requires:** `export` scope **and** a ZKP-protected key.
 
-**Relevant bits:**  
-`Pages/Api/Stats.cshtml(.cs)`  
-`Pages/Api/Visits.cshtml(.cs)`  
-`Pages/Api/Visitor.cshtml(.cs)`  
+**Relevant bits:**
+`Pages/Api/Stats.cshtml(.cs)`
+`Pages/Api/Visits.cshtml(.cs)`
+`Pages/Api/Visitor.cshtml(.cs)`
 `Pages/Api/Export.cshtml(.cs)`
 
 ---
@@ -192,11 +227,42 @@ Make sure Redis is reachable or tweak `appsettings*.json` accordingly.
 
 Use Ask2Ask when you need:
 
-* **Fraud / abuse** triage with more signal than “one IP, one UA”
-* **Investigation tooling** to correlate “anonymous” hits across time and infra
+* **Fraud / abuse** triage with more signal than "one IP, one UA"
+* **Investigation tooling** to correlate "anonymous" hits across time and infra
+* **Geolocation anomaly detection** (VPN exit vs inferred location mismatches)
 * **Exportable telemetry** you can feed into your own data lake / SIEM / ML pipeline
+* **Metro-level region inference** for visitor pattern correlation and fraud scoring
 
-It doesn’t try to be a dashboard product. It’s the **sensor and attester** you plug into your own stack.
+It doesn't try to be a dashboard product. It's the **sensor and attester** you plug into your own stack.
+
+---
+
+## Training ML Models (Optional)
+
+The **InferredRegionEngine** works out of the box with heuristic inference. For higher confidence (0.8–0.95), train and deploy ONNX models:
+
+### Quick Start
+```bash
+# Export 3+ months of data
+curl -H "X-Api-Key: key" "https://ask2ask.com/api/export?format=ndjson" > data.ndjson
+
+# Train model
+python scripts/train_inferred_region_model.py \
+  --input data.ndjson \
+  --output Models/ \
+  --num-rounds 100
+
+# Deploy model files (app auto-detects)
+cp Models/inferred_region.* /app/Models/
+# Restart application
+```
+
+See [docs/INFERRED_REGION_MODEL_TRAINING.md](docs/INFERRED_REGION_MODEL_TRAINING.md) for complete guide:
+- Data preparation & labeling
+- Feature engineering
+- LightGBM training & hyperparameter tuning
+- ONNX export & metadata generation
+- Deployment & troubleshooting
 
 ---
 
