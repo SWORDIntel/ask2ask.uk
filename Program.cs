@@ -32,8 +32,17 @@ builder.Services.AddScoped<ZkpAuthenticationService>();
 // Add ASN ping timing service
 builder.Services.AddScoped<AsnPingTimingService>();
 
-// Add inferred region engine
-builder.Services.AddScoped<IInferredRegionEngine, InferredRegionEngine>();
+// Add inferred region engines (ONNX + heuristic with fallback)
+builder.Services.AddScoped<OnnxInferredRegionEngine>();
+builder.Services.AddScoped<InferredRegionEngine>();
+builder.Services.AddScoped<IInferredRegionEngine>(provider =>
+{
+    // Register composite engine with fallback: ONNX → Heuristic
+    var logger = provider.GetRequiredService<ILogger<CompositeInferredRegionEngine>>();
+    var onnxEngine = provider.GetRequiredService<OnnxInferredRegionEngine>();
+    var heuristicEngine = provider.GetRequiredService<InferredRegionEngine>();
+    return new CompositeInferredRegionEngine(logger, onnxEngine, heuristicEngine);
+});
 
 var app = builder.Build();
 
