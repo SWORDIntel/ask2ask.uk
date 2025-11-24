@@ -10,11 +10,16 @@ public class TrackingService
 {
     private readonly TrackingDbContext _context;
     private readonly ILogger<TrackingService> _logger;
+    private readonly IInferredRegionEngine _inferredRegionEngine;
 
-    public TrackingService(TrackingDbContext context, ILogger<TrackingService> logger)
+    public TrackingService(
+        TrackingDbContext context,
+        ILogger<TrackingService> logger,
+        IInferredRegionEngine inferredRegionEngine)
     {
         _context = context;
         _logger = logger;
+        _inferredRegionEngine = inferredRegionEngine;
     }
 
     public async Task<Visit> RecordVisitAsync(
@@ -76,6 +81,27 @@ public class TrackingService
         _context.VPNProxyDetections.Add(vpnDetection);
 
         await _context.SaveChangesAsync();
+
+        // Run inferred region inference
+        try
+        {
+            var correlation = await GetLatestAsnPingCorrelationForVisitorAsync(visitor.Id);
+            var inferredRegion = await _inferredRegionEngine.InferAsync(visit, correlation);
+
+            if (inferredRegion is not null)
+            {
+                visit.InferredRegionId = inferredRegion.RegionId;
+                visit.InferredRegionConfidence = inferredRegion.Confidence;
+                visit.InferredRegionFlagsJson = JsonSerializer.Serialize(inferredRegion.Flags);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error running inferred region inference for visit {VisitId}", visit.Id);
+            // Don't fail the visit recording if inference fails
+        }
 
         return visit;
     }
@@ -298,6 +324,12 @@ public class TrackingService
                     v.VPNProxyDetection.RemoteIP,
                     v.VPNProxyDetection.SuspicionLevel,
                     v.VPNProxyDetection.IsLikelyVPNOrProxy
+                } : null,
+                InferredRegion = v.InferredRegionId != null ? new
+                {
+                    v.InferredRegionId,
+                    Confidence = v.InferredRegionConfidence ?? 0,
+                    Flags = v.InferredRegionFlagsJson
                 } : null
             })
             .ToListAsync();
@@ -327,6 +359,42 @@ public class TrackingService
             return null;
         }
 
+        var visits = visitor.Visits.Select(v => new
+        {
+            v.Id,
+            v.Timestamp,
+            v.RemoteIP,
+            v.UserAgent,
+            v.SHA384Hash,
+            VpnDetection = v.VPNProxyDetection != null ? new
+            {
+                v.VPNProxyDetection.RemoteIP,
+                v.VPNProxyDetection.IPChain,
+                v.VPNProxyDetection.SuspicionLevel,
+                v.VPNProxyDetection.IsLikelyVPNOrProxy,
+                v.VPNProxyDetection.DetectionIndicators
+            } : null,
+            InferredRegion = v.InferredRegionId != null ? new
+            {
+                v.InferredRegionId,
+                Confidence = v.InferredRegionConfidence ?? 0,
+                Flags = v.InferredRegionFlagsJson
+            } : null
+        }).OrderByDescending(v => v.Timestamp);
+
+        // Calculate summary of inferred regions for this visitor
+        var regionSummary = visitor.Visits
+            .Where(v => !string.IsNullOrEmpty(v.InferredRegionId))
+            .GroupBy(v => v.InferredRegionId)
+            .Select(g => new
+            {
+                RegionId = g.Key,
+                Count = g.Count(),
+                AverageConfidence = g.Average(v => v.InferredRegionConfidence ?? 0)
+            })
+            .OrderByDescending(r => r.Count)
+            .ToList();
+
         return new
         {
             visitor.Id,
@@ -337,22 +405,8 @@ public class TrackingService
             visitor.UserAgent,
             visitor.Platform,
             visitor.Language,
-            Visits = visitor.Visits.Select(v => new
-            {
-                v.Id,
-                v.Timestamp,
-                v.RemoteIP,
-                v.UserAgent,
-                v.SHA384Hash,
-                VpnDetection = v.VPNProxyDetection != null ? new
-                {
-                    v.VPNProxyDetection.RemoteIP,
-                    v.VPNProxyDetection.IPChain,
-                    v.VPNProxyDetection.SuspicionLevel,
-                    v.VPNProxyDetection.IsLikelyVPNOrProxy,
-                    v.VPNProxyDetection.DetectionIndicators
-                } : null
-            }).OrderByDescending(v => v.Timestamp)
+            RegionSummary = regionSummary,
+            Visits = visits
         };
     }
 
@@ -564,6 +618,14 @@ public class TrackingService
         catch { }
         
         return null;
+    }
+
+    private async Task<AsnPingCorrelation?> GetLatestAsnPingCorrelationForVisitorAsync(int visitorId)
+    {
+        return await _context.AsnPingCorrelations
+            .Where(c => c.VisitorId == visitorId)
+            .OrderByDescending(c => c.LastSeen)
+            .FirstOrDefaultAsync();
     }
 
     private string GenerateSHA384Hash(string data)

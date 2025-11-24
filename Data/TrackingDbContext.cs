@@ -14,6 +14,7 @@ public class TrackingDbContext : DbContext
     public DbSet<VPNProxyDetection> VPNProxyDetections { get; set; }
     public DbSet<AsnPingTiming> AsnPingTimings { get; set; }
     public DbSet<AsnPingCorrelation> AsnPingCorrelations { get; set; }
+    public DbSet<Region> Regions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -142,13 +143,18 @@ public class Visit
     public double? MemoryUsed { get; set; }
     public double? MemoryLimit { get; set; }
     public double? PerformanceScore { get; set; }
-    
+
     // Full tracking data as JSON
     public string TrackingDataJson { get; set; } = string.Empty;
-    
+
     // CNSA 2.0 Cryptographic Hash
     public string SHA384Hash { get; set; } = string.Empty;
-    
+
+    // Inferred Region (from InferredRegionEngine)
+    public string? InferredRegionId { get; set; }
+    public double? InferredRegionConfidence { get; set; } // 0.0 to 1.0
+    public string? InferredRegionFlagsJson { get; set; } // JSON with mismatch flags
+
     // Navigation properties
     public Visitor Visitor { get; set; } = null!;
     public VPNProxyDetection? VPNProxyDetection { get; set; }
